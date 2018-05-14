@@ -1,5 +1,6 @@
-Introduction
-------------
+# ThirdChannel Code Challenge 
+
+## Introduction
 
 This code challenge will test your ability to quickly develop a
 solution to a straightforward, but open-ended, problem. You can use
@@ -8,39 +9,48 @@ existing libraries. It can be solved in a variety of ways but we've
 structured it so that you won't be able to to use a single off the
 shelf solution. 
 
-Program
--------
+## Program
 
 Command line template and data file processor.
 
 
-Requirements
-------------
+## Requirements
 
-* Parse a template file, specified as a command line argument, into an
-  in-memory representation
-* Read a data file from STDIN, parsing it into an in-memory representation
-* Apply the data to the template
-* Output the result to STDOUT
+* Parse a template file, specified as the first command line argument, into an
+  in-memory representation.
+* Read a data file from STDIN, parsing it into an in-memory representation.
+* Apply the data to the template.
+* Output the result to STDOUT.
+* If any variable placeholders in the template are not supplied,
+your program should not produce any output.
 
+## Example
 
-Here is an example of a template:
+### Template
 
-Hello, ((name))
+```
+Hello, ((person)).
+```
 
-A data file for this template is:
+The text wrapped in double-parentheses (`((` and `))`) is a variable placeholder.
 
-name=Jane Doe
+### Data file
 
-Applying this to the template would result in the text:
+```
+person=Jane Doe
+```
 
-Hello, Jane Doe
+Where `person` is a variable name, and `Jane Doe` is its corresponding variable value.
 
-The name within the double-parenthesis in the template corresponds to
-the value in the data file.
+### Output
 
-Running
--------
+The variable placeholder has been replaced with the corresponding value:
+
+```
+Hello, Jane Doe.
+```
+
+## Running
 
 There is a script in the root of this directory called "run" which you
 will use to launch your program. You will most likely need to alter it
@@ -48,18 +58,24 @@ to run the program you build, depending on the language used.
 
 The run script will be called like:
 
-run template-name < data-file > output
+```
+run template-file < data-file > output-file
+```
+
+That is, a template file will be supplied as the first argument,
+the data file will be supplied via STDIN,
+and your program should output the result on STDOUT.
 
 There is also a script called "test", which will launch the "run"
 script with the example template called "template" for every file in
-the directory called "source". It will capture the output of your
-program for each of these input files into another directory called
-"dest". It will then compare the output with a directory of expected
-files called "expected". You can use this test script as you
-develop. Once the test passes, you are done!
+the `input` directory. It will capture the output of your
+program for each of these input files into the `output` directory.
+It will then compare the `output` directory to the `expected` directory,
+which contains the expected outputs from a correct program.
+You can use this test script as you develop.
+Once the test passes, you are done!
 
-Considerations
---------------
+## Considerations
 
 * How does your program handle errors?
 * How robust is your program against invalid input?
@@ -67,7 +83,3 @@ Considerations
 * Is there enough testing?
 
 Good luck!
-
-
-
-
