@@ -58,6 +58,14 @@ program for each of these input files into another directory called
 files called "expected". You can use this test script as you
 develop. Once the test passes, you are done!
 
+Considerations
+--------------
+
+* How does your program handle errors?
+* How robust is your program against invalid input?
+* Is it written in a way that another programmer can understand it?
+* Is there enough testing?
+
 Good luck!
 
 
