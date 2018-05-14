@@ -54,24 +54,26 @@ The variable placeholder has been replaced with the corresponding variable value
 
 ## Running
 
-There is a script in the root of this directory called "run" which you
-will use to launch your program. You will most likely need to alter it
-to run the program you build, depending on the language used.
+There is a script in the root of this directory called `run.sh`,
+which you will use to launch your program.
+You will most likely need to alter it to run the program you build,
+depending on the language used.
 
 The run script will be called like:
 
 ```
-run template-file < data-file > output-file
+./run.sh template-file < data-file > output-file
 ```
 
 That is, a template file will be supplied as the first argument,
 the data file will be supplied via STDIN,
 and your program should output the result on STDOUT.
 
-There is also a script called `test`, which will launch the `run`
-script with the example template called `template` for every file in
-the `input` directory. It will capture the output of your
-program for each of these input files into the `output` directory.
+There is also a script called `test.sh`,
+which will launch `run.sh` with the example template called `template`
+for every file in the `input` directory.
+It will capture the output of your program for
+each of these input files into the `output` directory.
 It will then compare the `output` directory to the `expected` directory,
 which contains the expected outputs from a correct program.
 You can use this test script as you develop.
