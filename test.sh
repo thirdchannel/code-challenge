@@ -2,7 +2,7 @@
 
 ls input | while read f
 do
-    ./run template < "input/$f" > "output/$f"     
+    ./run.sh template < "input/$f" > "output/$f"     
 done
 
 diff expected output
