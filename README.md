@@ -18,11 +18,12 @@ Command line template and data file processor.
 
 * Parse a template file, specified as the first command line argument, into an
   in-memory representation.
-* Read a data file from STDIN, parsing it into an in-memory representation.
+* Read a data file containing variable bindings from STDIN, parsing it into an in-memory representation.
 * Apply the data to the template.
 * Output the result to STDOUT.
 * If any variable placeholders in the template are not supplied,
 your program should not produce any output.
+* Leading or trailing whitespace in variable names and values should be stripped.
 
 ## Example
 
@@ -40,15 +41,16 @@ The text wrapped in double-parentheses (`((` and `))`) is a variable placeholder
 person=Jane Doe
 ```
 
-Where `person` is a variable name, and `Jane Doe` is its corresponding variable value.
+Each line in the data file represents a variable binding.
+In this example, `person` is a variable name, and `Jane Doe` is its corresponding variable value.
 
 ### Output
-
-The variable placeholder has been replaced with the corresponding value:
 
 ```
 Hello, Jane Doe.
 ```
+
+The variable placeholder has been replaced with the corresponding variable value.
 
 ## Running
 
@@ -66,8 +68,8 @@ That is, a template file will be supplied as the first argument,
 the data file will be supplied via STDIN,
 and your program should output the result on STDOUT.
 
-There is also a script called "test", which will launch the "run"
-script with the example template called "template" for every file in
+There is also a script called `test`, which will launch the `run`
+script with the example template called `template` for every file in
 the `input` directory. It will capture the output of your
 program for each of these input files into the `output` directory.
 It will then compare the `output` directory to the `expected` directory,
