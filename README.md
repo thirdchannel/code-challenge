@@ -69,8 +69,10 @@ That is, a template file will be supplied as the first argument,
 the data file will be supplied via STDIN,
 and your program should output the result on STDOUT.
 
-There is also a script called `test.sh`,
-which will launch `run.sh` with the example template called `template`
+## Testing
+
+There is a script called `test.sh`,
+which will execute `run.sh` with the example template called `template`
 for every file in the `input` directory.
 It will capture the output of your program for
 each of these input files into the `output` directory.
