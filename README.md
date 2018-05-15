@@ -88,4 +88,8 @@ Once the test passes, you are done!
 * Is it written in a way that another programmer can understand it?
 * Is there enough testing?
 
+## Submitting Your Code
+
+Please fork the repository to your own account, do your work there, and submit a pull request.
+
 Good luck!
