@@ -1,0 +1,13 @@
+Approach: 
+I used FileReader/Writer to read data from file and write into output. BufferedReader/Writer was also used to process the strings of data.
+
+The methodology i used was checking key:value pairs in input file and store them in string variables. Even if single Key:Value pair was absent a blank output file was generated. All blank spaces in key:value pairs were trimmed
+
+After reading through all key value pairs in input file, we parsed through template file and replaced appropriate values into placeholders using string methods.
+
+The template, input and output file were passed as arguments during compile time.
+
+
+
+Issues:
+Since files were passed as arguments during compile time, the test.sh file was reading input through STDIN and giving me arrayindexOutofBoound error. I replaced ./run.sh template < "input/$f" > "output/$f" with  ./run.sh template "input/$f" "output/$f" in order to get test results.
