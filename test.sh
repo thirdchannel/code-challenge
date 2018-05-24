@@ -16,4 +16,6 @@ else
     echo "Tests Failed"
 fi
 
+read
+
 
