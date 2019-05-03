@@ -4,7 +4,7 @@ mkdir -p output
 
 ls input | while read f
 do
-    ./run.sh template < "input/$f" > "output/$f"     
+    ./run.sh template "input/$f" > "output/$f"
 done
 
 diff expected output
