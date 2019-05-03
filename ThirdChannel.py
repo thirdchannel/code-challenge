@@ -1,25 +1,21 @@
 import sys
 
-# this method will read a file and parse the variable name and values and return them in a dictionary
-def parse_input_file(input_file):
-    try:
-        key_values = {}
-        with open(input_file) as file:
-            for line in file:
-                parsed_line = line.split("=")
-                parsed_line_length = len(parsed_line)
-                if parsed_line_length == 2:
+# this method will read in file contents and parse the variable name and values and return them in a dictionary
+def parse_input_file(input_contents):
+    key_values = {}
+    for line in input_contents:
+        parsed_line = line.split("=")
+        parsed_line_length = len(parsed_line)
 
-                    # strip leading or trailing whitespace in variable names and values
-                    key = parsed_line[0].strip()
-                    value = parsed_line[1].strip()
-                    key_values[key] = value
-                else:
-                    continue
-        return key_values
+        if parsed_line_length == 2:
 
-    except:
-        print("Error could not open input_file: ", input_file)
+            # strip leading or trailing whitespace in variable names and values
+            key = parsed_line[0].strip()
+            value = parsed_line[1].strip()
+            key_values[key] = value
+
+    return key_values
+
 
 # this method will check the dictionary passed and see if it has the necessary keys and that the values associated
 # with the keys are not None nor empty
@@ -32,10 +28,10 @@ def is_valid_dict(dict):
             return False
     return True
 
-def substitute_template(template_file, input_file):
+def substitute_template(template_file, input_contents):
 
     # Read in input file as dictionary
-    input_file_dict = parse_input_file(input_file)
+    input_file_dict = parse_input_file(input_contents)
 
     # missing variable placeholders in the dictionary will result in no output
     if is_valid_dict(input_file_dict):
@@ -49,9 +45,13 @@ def substitute_template(template_file, input_file):
 
         print(filedata.strip())
 
-#command line inputs
-template_file = sys.argv[1]
-input_file = sys.argv[2]
+if __name__ == "__main__":
+    try:
+        # command line inputs
+        template_file = sys.argv[1]
+        input_contents = sys.stdin.readlines()
 
-# output the result to output_file
-substitute_template(template_file, input_file)
+        # output the result to output_file
+        substitute_template(template_file, input_contents)
+    except:
+        print("Error creating substituted template!")
