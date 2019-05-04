@@ -1,4 +1,5 @@
 import sys
+import re
 
 # this method will read in file contents and parse the variable name and values and return them in a dictionary
 def parse_input_file(input_contents):
@@ -19,8 +20,7 @@ def parse_input_file(input_contents):
 
 # this method will check the dictionary passed and see if it has the necessary keys and that the values associated
 # with the keys are not None nor empty
-def is_valid_dict(dict):
-    necessary_keys = ['name', 'product', 'gift', 'gift-value', 'representative']
+def is_valid_dict(dict, necessary_keys):
     for key in necessary_keys:
         if key in dict and dict[key]:
             continue
@@ -29,21 +29,23 @@ def is_valid_dict(dict):
     return True
 
 def substitute_template(template_file, input_contents):
+    with open(template_file, 'r') as file:
+        template_contents = file.read()
 
-    # Read in input file as dictionary
-    input_file_dict = parse_input_file(input_contents)
+        # This regex expression looks for all contents between "((" and "))"
+        template_variables = re.findall(r'\(\((.*?)\)\)', template_contents)
 
-    # missing variable placeholders in the dictionary will result in no output
-    if is_valid_dict(input_file_dict):
-        # Read in template file
-        with open(template_file, 'r') as file:
-            filedata = file.read()
+        # Read in input file as dictionary
+        input_file_dict = parse_input_file(input_contents)
 
-        # perform substitution
-        for key in input_file_dict:
-            filedata = filedata.replace('((' + key + '))', input_file_dict[key])
+        # missing variable placeholders in the dictionary will result in no output
+        if is_valid_dict(input_file_dict, template_variables):
 
-        print(filedata.strip())
+            # perform substitution
+            for key in input_file_dict:
+                template_contents = template_contents.replace('((' + key + '))', input_file_dict[key])
+
+            print(template_contents.strip())
 
 if __name__ == "__main__":
     try:
