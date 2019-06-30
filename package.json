@@ -1,0 +1,24 @@
+{
+  "name": "code-challenge",
+  "version": "1.0.0",
+  "description": "This code challenge will test your ability to quickly develop a\r solution to a straightforward, but open-ended, problem. You can use\r any language you are most comfortable with, and you are free to use\r existing libraries. It can be solved in a variety of ways but we've\r structured it so that you won't be able to to use a single off the\r shelf solution.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "app": "sh ./run.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thirdchannel/code-challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thirdchannel/code-challenge/issues"
+  },
+  "homepage": "https://github.com/thirdchannel/code-challenge#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "yargs": "^13.2.4"
+  }
+}
