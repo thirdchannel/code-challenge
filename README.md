@@ -25,6 +25,8 @@ Command line template and data file processor.
 your program should not produce any output.
 * Leading or trailing whitespace in variable names and values should be stripped.
 
+NOTE: Your program should be able to accept any arbitrary template and data files as parameters not just the ones provided for the test. 
+
 ## Example
 
 ### Template
