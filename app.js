@@ -1,63 +1,46 @@
 // Ensure Node.js is installed on your system
-var fs = require("fs");
+const fs = require("fs");
 
-if (process.argv.length < 5) {
-  console.log("Error: Template file, data file, and output file required.");
-  return;
-}
+// Finds keys inside ((double-parentheses))
+const dblPrn = new RegExp(/\([()]*(\([^()]*\)[^()]*)*\)/gim);
+const templateFile = fs.readFileSync(('./' + process.argv[2])).toString();
+const dataFile = fs.readFileSync(0).toString();
+const matches = templateFile.match(dblPrn);
+const keysAndVals = dataFile.split(new RegExp(/=|\n/gmi));
 
-const templateFileName = "./" + process.argv[2];
-const dataFileName = "./" + process.argv[3];
-const outputFileName = "./" + process.argv[4];
-
-const templateFile = fs.readFileSync(templateFileName, "utf-8");
-const dataFile = fs.readFileSync(dataFileName, "utf-8");
-const lines = dataFile.split("\n");
-let regex = new RegExp(/\([()]*(\([^()]*\)[^()]*)*\)/gim);
-let matches = templateFile.match(regex);
-var keys = [];
+var keys = [], json = {}, regexVals = [];
 
 matches.forEach(i => {
   let result = i.replace(new RegExp(/\(\(|\)\)/gim), "");
   keys.push(result);
 });
-var json = {};
 
-if (!dataFile || lines.length < 1) {
-  console.log("Error: No values in data file.");
-  return;
+// Separates Key/Value pairs and creates JSON
+for (var i = 0; i < keysAndVals.length; i++) {
+  if (!keysAndVals[i] || keysAndVals[i] == '') keysAndVals.splice(i, 1);
+  if (!keysAndVals[i]) continue;
+  const trimmedKey = keysAndVals[i].replace(new RegExp(/\s|\n/g), "");
+  i++;
+  if (!keysAndVals[i] || keysAndVals[i] == '') keysAndVals.splice(i, 1);
+  if (!keysAndVals[i]) continue;
+  const trimmedVal = keysAndVals[i].replace(new RegExp(/^\s+|\s+$/g), "")
+  json[trimmedKey] = trimmedVal;
 }
-
-for (var i = 0; i < lines.length; i++) {
-  let split = lines[i].split(new RegExp(/=/));
-  let trimmed = split[0].replace(new RegExp(/\s/), "");
-  json[trimmed] = split[1];
-}
-
-console.log("Template: \n" + templateFile);
-
-var regexVals = [];
 
 for (var a = 0; a < keys.length; a++) {
-  if (!json[keys[a]]) {
-    console.log("Error: Incomplete data file");
-    return;
-  } else {
-    let regex = new RegExp("\\([()]*(\\(" + keys[a] + "[^()]*\\)[^()]*)*\\)");
-    regexVals.push(regex);
-  }
+  let regex = new RegExp("\\(\\(" + keys[a] + "\\)\\)");
+  regexVals.push(regex);
 }
 
 var adjustedText = templateFile;
 
 for (var b = 0; b < regexVals.length; b++) {
+  if (!json[keys[b]]) {
+    process.stdout.write('')
+    return;
+  }
   let result = adjustedText.replace(regexVals[b], json[keys[b]]);
   adjustedText = result;
 }
+process.stdout.write(adjustedText)
 
-let writeStream = fs.createWriteStream(outputFileName);
-let buf = Buffer.from(adjustedText, "utf-8");
-writeStream.write(buf);
-writeStream.end();
-
-console.log("New File: \n" + adjustedText);
