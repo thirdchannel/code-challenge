@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ThirdChannel</string>
+    <string name="permission_read_external_storage">Permission</string>
+    <string name="choose_template">Choose Template</string>
+    <string name="choose_value">Choose Value</string>
+    <string name="template">Template</string>
+    <string name="result">Result</string>
+</resources>
