@@ -82,8 +82,10 @@ public class MainActivity extends AppCompatActivity {
                         String[] value = line.split("=");
                         String key = value[0].trim();
                         if (!key.equals("")) {
-                            String val = value[1].trim();
-                            resultText = resultText.replace("((" + key + "))", val);
+                            if (value.length > 1) {
+                                String val = value[1].trim();
+                                resultText = resultText.replace("((" + key + "))", val);
+                            }
                         }
                     }
                 }
