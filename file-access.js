@@ -12,18 +12,23 @@ const inputTemplate = envVars[0]
 const outputFilepath = `${envVars[2]}`
 
 exports.createEmptyOutputFile = () => {
+  // essentially 'touch' the file to create an empty file
   fs.closeSync(fs.openSync(outputFilepath, 'w'))
 }
 
 exports.getDataBindings = () => {
   return new Promise((resolve, reject) => {
     const lineReader = require('readline').createInterface({ input: fs.createReadStream(inputFile) })
-    const bindingData = new Map()
+    const dataBindings = new Map()
 
     lineReader.on('line', (line) => {
+      // split data file on '=' sign
       const splitLine = line.split(DATA_DELIMITER)
+      // if we have two parts, continue, otherwise ignore the line
       if (splitLine.length === 2) {
-        bindingData.set(`${PAREN_FRONT}${splitLine[0].trim()}${PAREN_BACK}`, splitLine[1].trim())
+        // key: ((key)); value: value.  Use the parenthesis wrapped binding as the key so we can search and replace
+        // in the template without needing to do any other string manipulation
+        dataBindings.set(`${PAREN_FRONT}${splitLine[0].trim()}${PAREN_BACK}`, splitLine[1].trim())
       }
     })
 
@@ -33,7 +38,7 @@ exports.getDataBindings = () => {
 
     // once the stream has finished reading, resolve the promise
     lineReader.on('close', () => {
-      resolve(bindingData)
+      resolve(dataBindings)
     })
   })
 }
@@ -41,13 +46,15 @@ exports.getDataBindings = () => {
 exports.getUniqueTemplateBindings = () => {
   return new Promise((resolve, reject) => {
     const readStream = fs.createReadStream(inputTemplate)
-    let bindings = []
+    let templateBindings = []
 
+    // A stream is used here (rather than loading the entire file at once) so that if a very large file is processed,
+    // we are not as likely to run out of memory
     readStream.on('data', function (chunk) {
       // get each binding and remove it's parentheses
       const tokens = chunk.toString().match(BINDING_REGEX)
       // store unique bindings, we'll use these later to validate the input variables
-      bindings = new Set([...tokens, ...bindings])
+      templateBindings = new Set([...tokens, ...templateBindings])
     })
 
     readStream.on('error', (e) => {
@@ -56,7 +63,7 @@ exports.getUniqueTemplateBindings = () => {
 
     // once the stream has finished reading, resolve the promise
     readStream.on('end', () => {
-      resolve(bindings)
+      resolve(templateBindings)
     })
   })
 }
@@ -75,6 +82,7 @@ exports.isHasValidBindings = (dataBindings, templateBindings) => {
 
 exports.writeTemplateToNewFile = (dataBindings) => {
   return new Promise((resolve, reject) => {
+    // delete files if they exist
     fs.stat(outputFilepath, () => {
       fs.unlink(outputFilepath, () => {})
     })
