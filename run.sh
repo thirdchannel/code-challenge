@@ -2,9 +2,10 @@
 
 if [[ $1 ]]
 then
-   if [[ -e "$1" ]]
+    # only allow actual files
+   if [[ -f "$1" ]]
    then
-       edit-me-to-run-your-program "$1"
+       node app.js "$1"
    else
        echo "Template not found: $1" >&2
    fi
