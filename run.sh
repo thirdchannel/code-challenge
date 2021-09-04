@@ -2,10 +2,10 @@
 
 if [[ $1 ]]
 then
-    # only allow actual files
+    # only allow files (no directories)
    if [[ -f "$1" ]]
    then
-       node app.js "$1"
+       node app.js "$1" "$2" "$3"
    else
        echo "Template not found: $1" >&2
    fi

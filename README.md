@@ -1,4 +1,9 @@
-# ThirdChannel Code Challenge 
+# ThirdChannel Code Challenge
+
+## Submission notes
+### Running the app
+### Assumptions
+1. The key value pairs in the data file will always be on separate lines and will not contain equals signs.
 
 ## Introduction
 
