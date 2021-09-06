@@ -1,4 +1,4 @@
-# ThirdChannel Code Challenge
+# ThirdChannel Code Challenge 
 
 ## Introduction
 
@@ -7,7 +7,7 @@ solution to a straightforward, but open-ended, problem. You can use
 any language you are most comfortable with, and you are free to use
 existing libraries. It can be solved in a variety of ways but we've
 structured it so that you won't be able to to use a single off the
-shelf solution.
+shelf solution. 
 
 ## Program
 
@@ -22,10 +22,10 @@ Command line template and data file processor.
 * Apply the data to the template.
 * Output the result to STDOUT.
 * If any variable placeholders in the template are not supplied,
-  your program should not produce any output.
+your program should not produce any output.
 * Leading or trailing whitespace in variable names and values should be stripped.
 
-NOTE: Your program should be able to accept any arbitrary template and data files as parameters not just the ones provided for the test.
+NOTE: Your program should be able to accept any arbitrary template and data files as parameters not just the ones provided for the test. 
 
 ## Example
 
