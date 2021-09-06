@@ -29,7 +29,7 @@ exports.getDataBindings = (inputFile) => {
         if (dataBindings.has(dataBinding)) {
           reject(`Error - invalid input: One or more duplicate keys found in ${inputFile}.`)
         }
-        dataBindings.set(`${PAREN_FRONT}${splitLine[0].trim()}${PAREN_BACK}`, splitLine[1].trim())
+        dataBindings.set(dataBinding, splitLine[1].trim())
       }
     })
 
