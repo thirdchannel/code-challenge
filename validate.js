@@ -1,5 +1,17 @@
 const fs = require('fs')
 
+const ERROR_PREFIX = 'Error -'
+const Errors = {
+  DuplicateInputBindingKey: (inputFile) => `${ERROR_PREFIX} Invalid input: One or more duplicate keys found in ${inputFile}.`,
+  InvalidArguments: (dirs) => `${ERROR_PREFIX} Invalid argument: Argument file paths cannot be directories: ${dirs}`,
+  InvalidData: (inputFile, lineNumber) => `${ERROR_PREFIX} Invalid data: ${inputFile} contains invalid binding data on line ${lineNumber}.`,
+  MissingArguments: (inputTemplate, inputFile, outputFile) => `${ERROR_PREFIX} Missing one or more arguments: ./run.sh ${inputTemplate} < ${inputFile} > ${outputFile}`
+}
+
+const Warnings = {
+  MultipleDelimiters: (bindingPair, inputFile, lineNumber) => `Warning: Line ${lineNumber} in ${inputFile} contains more than one delimiter - may cause output errors.`
+}
+
 /**
  * Validate that:
  *  Bindings exist for the template
@@ -28,7 +40,7 @@ const hasEmptyArguments = (args) => {
     const inputTemplate = args[0] ? args[0] : 'template-missing'
     const outputFile = args[2] ? args[2] : 'output-file-missing'
 
-    throw `Error: Missing one or more arguments: ./run.sh ${inputTemplate} < ${inputFile} > ${outputFile}`
+    throw Errors.MissingArguments(inputTemplate, inputFile, outputFile)
   }
   return false
 }
@@ -41,7 +53,7 @@ const hasEmptyArguments = (args) => {
 hasDirectoryAsFilePath = (args) => {
   const dirs = args.filter(arg => fs.existsSync(arg) && fs.lstatSync(arg).isDirectory())
   if (dirs.length) {
-    throw `Error - Invalid argument: Argument file paths cannot be existing directories: ${dirs}`
+    throw Errors.InvalidArguments(dirs)
   }
   return false
 }
@@ -53,4 +65,58 @@ hasDirectoryAsFilePath = (args) => {
  */
 exports.hasValidArguments = (args) => {
   return !hasEmptyArguments(args) && !hasDirectoryAsFilePath(args)
+}
+
+/**
+ * Expect binding pair to have length of 2, if not throw appropriate error or warning
+ * @param bindingPair
+ * @param inputFile
+ * @param lineNumber
+ * @returns {boolean}
+ */
+
+const isBindingAKeyValuePair = (bindingPair, inputFile, lineNumber) => {
+  if (!bindingPair || bindingPair.length < 2) {
+    throw Errors.InvalidData(inputFile, lineNumber)
+  } else if (bindingPair.length > 2) {
+    console.warn(Warnings.MultipleDelimiters(bindingPair, inputFile, lineNumber))
+  }
+  return true
+}
+
+/**
+ * Reject key value pairs with either key or value empty after trimming
+ * @param bindingPair
+ * @param inputFile
+ * @param lineNumber
+ * @returns {boolean}
+ */
+const isBindingEmpty = (bindingPair, inputFile, lineNumber) => {
+  if (!bindingPair[0].trim() || (bindingPair[1] && !bindingPair[1].trim())) {
+    throw Errors.InvalidData(inputFile, lineNumber)
+  }
+  return false
+}
+
+/**
+ * Check that binding pair is valid
+ * @param bindingPair
+ * @param inputFile
+ * @param lineNumber
+ * @returns {boolean}
+ */
+exports.isValidBindingPair = (bindingPair, inputFile, lineNumber) => {
+  return isBindingAKeyValuePair(bindingPair, inputFile, lineNumber) && !isBindingEmpty(bindingPair, inputFile, lineNumber)
+}
+
+/**
+ * Check for duplicate keys throw if duplicates are found
+ * @param dataBindings
+ * @param bindingKey
+ * @param inputFile
+ */
+exports.isNotDuplicateBindingKey = (bindingKey, dataBindings, inputFile) => {
+  if (dataBindings.has(bindingKey)) {
+    throw Errors.DuplicateInputBindingKey(inputFile)
+  }
 }

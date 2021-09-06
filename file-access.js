@@ -9,21 +9,21 @@ const BINDING_REGEX = /\(\([^()]+\)\)/g
  * @returns {Map<any, any>}
  */
 exports.getDataBindings = (inputFile) => {
-  const data = fs.readFileSync(inputFile, 'utf-8').split('\n').filter(line => line !== '')
+  const data = fs.readFileSync(inputFile, 'utf-8').split('\n')
   const dataBindings = new Map()
+  let lineNumber = 1
 
   data.forEach(line => {
-    const bindingPair = line.split('=')
+    if (line !== '') {
+      const bindingPair = line.split('=')
+      validate.isValidBindingPair(bindingPair, inputFile, lineNumber)
 
-    if (bindingPair.length !== 2) {
-      console.warn(`Warning: ${bindingPair} in ${inputFile} invalid delimitation - omitted.`)
-    }
-    const bindingKey = `((${bindingPair[0].trim()}))`
+      const bindingKey = `((${bindingPair[0].trim()}))`
+      validate.isNotDuplicateBindingKey(bindingKey, dataBindings, inputFile)
 
-    if (dataBindings.has(bindingKey)) {
-      throw `Error - invalid input: One or more duplicate keys found in ${inputFile}.`
+      dataBindings.set(bindingKey, bindingPair[1].trim())
     }
-    dataBindings.set(bindingKey, bindingPair[1].trim())
+    lineNumber++
   })
 
   return dataBindings
