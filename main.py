@@ -1,5 +1,5 @@
 import sys
-from typing import Dict, Optional
+from typing import Dict
 
 # Constants
 VAR_START_DELIM = "(("
@@ -7,20 +7,25 @@ VAR_END_DELIM = "))"
 
 
 class SymbolTable:
+    """Encapsulates a table of symbols in which each consists of a name and value."""
     def __init__(self):
         self.__dict: Dict[str, str] = {}
 
     def __str__(self):
+        """Allows SymbolTable instances to be displayed to stdout using the built-in print() method."""
         ret = "{\n"
         for key in self.__dict:
             ret += f"\t{key}: {self.__dict[key]}\n"
         ret += "}"
+
         return ret
 
     def add_symbol(self, name: str, value: str):
+        """Adds a symbol to the table."""
         self.__dict[name] = value
 
     def get_symbol(self, name: str) -> str:
+        """Retrieves a symbol from the table. If the given symbol name is not found, the empty string is returned."""
         if name in self.__dict:
             return self.__dict[name]
         return ""
@@ -43,6 +48,7 @@ def main():
 
 
 def get_template(template_file: str) -> str:
+    """Reads a given template file and returns its contents."""
     with open(template_file, "r") as f:
         template = f.read()
         f.close()
@@ -51,6 +57,7 @@ def get_template(template_file: str) -> str:
 
 
 def get_symbols() -> SymbolTable:
+    """Reads symbols from stdin in the form name=value and stores them in a SymbolTable."""
     symbol_table = SymbolTable()
 
     # Get input from stdin
@@ -69,6 +76,8 @@ def get_symbols() -> SymbolTable:
 
 
 def insert_symbols(template: str, symbol_table: SymbolTable) -> str:
+    """Replaces all instances of variables within a given template string with their corresponding values within a
+        given symbol table."""
     ret = template
     while True:
         # Search the template for delimiters enclosing a variable
