@@ -1,5 +1,5 @@
 import sys
-from typing import Dict
+from typing import Dict, Optional
 
 # Constants
 VAR_START_DELIM = "(("
@@ -24,11 +24,12 @@ class SymbolTable:
         """Adds a symbol to the table."""
         self.__dict[name] = value
 
-    def get_symbol(self, name: str) -> str:
-        """Retrieves a symbol from the table. If the given symbol name is not found, the empty string is returned."""
+    def get_symbol(self, name: str) -> Optional[str]:
+        """Retrieves a symbol from the table. If the given symbol name is not found, None is returned."""
         if name in self.__dict:
             return self.__dict[name]
-        return ""
+
+        return None
 
 
 def main():
@@ -95,7 +96,7 @@ def insert_symbols(template: str, symbol_table: SymbolTable) -> str:
         var_value = symbol_table.get_symbol(var_name)
 
         # Return an empty string if the variable name is not found within the symbol table
-        if var_value == "":
+        if var_value is None:
             return ""
 
         # Replace the delimiters and variable name with the value of the variable
